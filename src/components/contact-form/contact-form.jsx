@@ -2,9 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import css from './contact-form.module.css';
 import { useState } from 'react';
-// import { useEffect } from 'react';
-// import { useMemo } from 'react';
-// import { useRef } from 'react';
+// import { createStore } from 'redux';
+// import { devToolsEnhancer } from '@redux-devtools/extension';
+// import { useSelector } from 'react-redux';
 
 const ContactForm = ({ onSubmit }) => {
   const [name, setName] = useState('');
