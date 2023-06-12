@@ -1,22 +1,36 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import css from './contact-list.module.css';
+import { useDispatch, useSelector } from 'react-redux';
+import { getFilter } from 'redux/actions';
+import { deleteContact, getContacts } from 'redux/initialState';
 
-function ContactList({ contacts, onDelete }) {
+function ContactList() {
+  const dispatch = useDispatch();
+  const contacts = useSelector(getContacts);
+  const filtered = useSelector(getFilter);
+
+  const normalizedFilter = filtered.toLowerCase();
+  const filteredContacts = contacts.filter(({ name }) =>
+    name.toLowerCase().includes(normalizedFilter)
+  );
   return (
-    <div className={css.contactList}>
-      {contacts.map(({ id, name, number }, idx) => (
-        <div key={id} className={css.contactItem}>
-          <div className={css.contactIndex}>{idx + 1}</div>
-          <div className={css.contactDetails}>
+    <ul className={css.contactList}>
+      {filteredContacts.map(({ id, name, number }) => (
+        <li key={id} className={css.contactItem}>
+          <p className={css.contactDetails}>
             {name}: {number}
-          </div>
-          <button className={css.deleteButton} onClick={() => onDelete(id)}>
+          </p>
+          <button
+            className={css.deleteButton}
+            type="button"
+            onClick={() => dispatch(deleteContact(id))}
+          >
             ❌
           </button>
-        </div>
+        </li>
       ))}
-    </div>
+    </ul>
   );
 }
 
