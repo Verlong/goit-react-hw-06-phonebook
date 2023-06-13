@@ -1,18 +1,26 @@
 import React from 'react';
 import css from './contact-form.module.css';
 import { useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { nanoid } from 'nanoid';
 import { addContact } from 'redux/initialState';
+import { getContacts } from 'redux/initialState';
+import Notiflix from 'notiflix';
 
 const ContactForm = () => {
   const [contactName, setContactName] = useState('');
   const [number, setNumber] = useState('');
 
   const dispatch = useDispatch();
+  const contacts = useSelector(getContacts);
 
   const handleSubmit = event => {
     event.preventDefault();
+
+    if (contacts.some(contact => contact.number === number)) {
+      Notiflix.Notify.failure(`${number} is already in your contacts`);
+      return;
+    }
 
     dispatch(
       addContact({
